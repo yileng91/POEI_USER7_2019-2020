@@ -25,6 +25,7 @@
         "drupal/console": "^1.0.2",
         "drupal/core": "^8.7.0",
         "drupal/pathauto": "^1.5",
+        "drupal/toolbar_themes": "^1.0@alpha",
         "drush/drush": "^9.0.0",
         "vlucas/phpdotenv": "^2.4",
         "webflo/drupal-finder": "^1.0.0",
@@ -81,6 +82,11 @@
                 ".editorconfig": "../.editorconfig",
                 ".gitattributes": "../.gitattributes"
             }
+        },
+        "patches": {
+            "drupal/toolbar_themes": {
+                "Fix CSS bug": "https://www.drupal.org/files/issues/2018-12-08/toolbar_themes-padding-issue-2981847-7.patch"
+            }    
         }
     }
 }
