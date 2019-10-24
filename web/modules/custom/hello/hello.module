@@ -1,0 +1,93 @@
+<?php
+
+/**
+ * Implements hook_help().
+ *
+ * @param $route_match
+ */
+function hello_help($route_name, \Drupal\Core\Routing\RouteMatchInterface $route_match) {
+    switch ($route_name) {
+
+        // Main module help for the block module.
+        case 'help.page.hello':
+            return '<p>' . t('Example module for Trained People') . '</p>';
+
+    }
+}
+
+/**
+ * Implements hook_cron().
+ *
+ */
+function hello_cron() {
+
+    \Drupal::messenger()->addMessage("hook hello cron");
+    /*// Short-running operation example, not using a queue:
+    // Delete all expired records since the last cron run.
+    $expires = \Drupal::state()
+        ->get('hello.last_check', 0);
+    \Drupal::database()
+        ->delete('hello_table')
+        ->condition('expires', $expires, '>=')
+        ->execute();
+    \Drupal::state()
+        ->set('hello.last_check', REQUEST_TIME);
+
+    // Long-running operation example, leveraging a queue:
+    // Queue news feeds for updates once their refresh interval has elapsed.
+    $queue = \Drupal::queue('aggregator_feeds');
+    $ids = \Drupal::entityManager()
+        ->getStorage('aggregator_feed')
+        ->getFeedIdsToRefresh();
+    foreach (Feed::loadMultiple($ids) as $feed) {
+        if ($queue
+            ->createItem($feed)) {
+
+            // Add timestamp to avoid queueing item more than once.
+            $feed
+                ->setQueuedTime(REQUEST_TIME);
+            $feed
+                ->save();
+        }
+    }
+    $ids = \Drupal::entityQuery('aggregator_feed')
+        ->condition('queued', REQUEST_TIME - 3600 * 6, '<')
+        ->execute();
+    if ($ids) {
+        $feeds = Feed::loadMultiple($ids);
+        foreach ($feeds as $feed) {
+            $feed
+                ->setQueuedTime(0);
+            $feed
+                ->save();
+        }
+    }*/
+}
+
+/**
+ * Implements hook_user_login().
+ *
+ * @param $account
+ */
+function hello_user_login(\Drupal\user\UserInterface $account) {
+    /*$config = \Drupal::config('system.date');
+
+    // If the user has a NULL time zone, notify them to set a time zone.
+    if (!$account
+            ->getTimezone() && $config
+            ->get('timezone.user.configurable') && $config
+            ->get('timezone.user.warn')) {
+        drupal_set_message(t('Configure your <a href=":user-edit">account time zone setting</a>.', array(
+            ':user-edit' => $account
+                ->url('edit-form', array(
+                    'query' => \Drupal::destination()
+                        ->getAsArray(),
+                    'fragment' => 'edit-timezone',
+                )),
+        )));
+    }*/
+    ksm($account); // affiche l'Objet
+    \Drupal::messenger()->addMessage("Hello ".$account->getAccountName());
+    \Drupal::messenger()->addMessage(t('Welcome dear %name',
+        ['%name'=> $account->getAccountName()]));
+}
