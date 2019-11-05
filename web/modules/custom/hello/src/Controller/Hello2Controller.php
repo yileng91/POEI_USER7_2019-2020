@@ -26,7 +26,7 @@ class Hello2Controller extends ControllerBase{
             $query->condition('type', $nodetype);
         }
         // récupère les ids des noeuds
-        $nids = $query->execute();
+        $nids = $query->pager()->execute();
         $nodes = $nodes_storages->loadMultiple($nids);
         //ksm($nodes);
         $items[] = '';
@@ -40,8 +40,16 @@ class Hello2Controller extends ControllerBase{
 
         return ['#type' => 'markup',
         '#markup' => $message];*/
-        return [
+        /*return [
+            '#theme' => 'item_list',
+            '#items' => $items];*/
+        $list = [
             '#theme' => 'item_list',
             '#items' => $items];
+        $pager = ['#type' => 'pager'];
+        return [
+            $pager, $list, $pager
+            ];
+
     }
 }
