@@ -1,10 +1,11 @@
 hello.page:
   title: 'Hello!'
   route_name: hello.page
-  description: 'Hello page'
-  menu_name: main
+  base_route: hello.page
+  weight: 1
 
 hello.page2:
   title: 'Hello 2'
   route_name: hello.page2
-  description: 'Hello 2 page'
+  base_route: hello.page
+  weight: 2

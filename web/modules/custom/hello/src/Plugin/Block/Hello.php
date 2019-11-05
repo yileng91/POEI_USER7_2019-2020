@@ -36,10 +36,23 @@ class Hello extends BlockBase{
         return $build;*/
         $date_formatter = \Drupal::service('date.formatter');
         $time = \Drupal::service('datetime.time')->getCurrentTime();
+        $user_name = \Drupal::currentUser()->getDisplayName();
         return [
-            '#markup' => $this->t('Welcome. It is %time.', [
+            '#markup' => $this->t('Welcome. %name It is %time.', [
+                '%name' => $user_name,
                 '%time' => $date_formatter->format($time, 'custom', 'H:i s\s'),
+
             ]),
+            /* cache tous les utilisateurs soit pas de clé de cache */
+            '#cache' => [
+                'max-age' => '0',
+            ]
+            /*cache par utilisateur */
+            /*'#cache' => [
+                'keys' => ['hello_block'],
+                'contexts' => ['user'],
+                'max-age' => '1000',
+                ],*/
         ];
     }
 }
