@@ -14,3 +14,11 @@ hello.page2:
     nodetype: ''
   requirements:
     _access: 'TRUE'
+
+hello.page3:
+  path: '/user/{user}/statistics'
+  defaults:
+    _title: 'Statistic User'
+    _controller: '\Drupal\hello\Controller\UserStatController::content'
+  requirements:
+    _access: 'TRUE'
