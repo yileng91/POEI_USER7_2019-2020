@@ -9,3 +9,9 @@ hello.page2:
   route_name: hello.page2
   base_route: hello.page
   weight: 2
+
+hello.page3:
+  title: 'Connections'
+  route_name: hello.page3
+  base_route: entity.user.canonical
+  weight: 3

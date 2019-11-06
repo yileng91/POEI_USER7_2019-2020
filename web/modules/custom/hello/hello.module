@@ -86,8 +86,45 @@ function hello_user_login(\Drupal\user\UserInterface $account) {
                 )),
         )));
     }*/
-    ksm($account); // affiche l'Objet
+
+    //ksm($account); // affiche l'Objet
     \Drupal::messenger()->addMessage("Hello ".$account->getAccountName());
     \Drupal::messenger()->addMessage(t('Welcome dear %name',
         ['%name'=> $account->getAccountName()]));
+
+    /*$database = \Drupal::database();
+    $database->insert('hello_user_statistics')->fields([
+            'id' => $account->id(),
+            'time' => REQUEST_TIME,
+            'uuid' => $account->uuid(),
+            'action' => 1,
+        ])->execute();*/
+
+    \Drupal::database()->insert('hello_user_statistics')
+        ->fields([
+        'uid' => $account->id(),
+        'time' => REQUEST_TIME,
+        'action' => 1,
+    ])->execute();
+
+}
+
+function hello_user_logout(\Drupal\Core\Session\AccountProxyInterface $account) {
+
+    \Drupal::database()->insert('hello_user_statistics')
+        ->fields([
+            'uid' => $account->id(),
+            'time' => REQUEST_TIME,
+            'action' => 0,
+        ])->execute();
+
+}
+
+function hello_user_delete(\Drupal\user\UserInterface $user) {
+
+    // delete user entity
+    \Drupal::database()->delete('hello_user_statistics')
+        ->condition('uid', $user->id())
+        ->execute();
+
 }
