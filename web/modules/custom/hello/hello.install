@@ -1,0 +1,33 @@
+<?php
+
+/*
+ * Installation d'une table
+ */
+function hello_schema(){
+    $schema['hello_user_statistics'] = [
+        'description' => 'Stores user connection statistics.',
+        'fields' => [
+            'id' => [
+                'description' => 'Primary Key: Unique history ID.',
+                'type' => 'serial',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+            ],
+            'time' => [
+                'description' => 'Timestamp of user action.',
+                'type' => 'int',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+            ],
+            'uid' => [
+                'type' => 'int',
+                'description' => "Store user ID.",
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+            ],
+        ],
+        'primary key' => ['id'],
+    ];
+
+    return $schema;
+}
