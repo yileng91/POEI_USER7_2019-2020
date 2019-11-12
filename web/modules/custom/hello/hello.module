@@ -22,6 +22,16 @@ function hello_help($route_name, \Drupal\Core\Routing\RouteMatchInterface $route
 function hello_cron() {
 
     \Drupal::messenger()->addMessage("hook hello cron");
+
+    $purge = \Drupal::config('hello.settings')->get('purge_days_number');
+    if($purge != '0'){
+        \Drupal::database()->delete('hello_user_statistics')
+            ->condition('time', REQUEST_TIME - $purge * (24 * 3600), '<')
+            ->execute();
+    }
+
+
+
     /*// Short-running operation example, not using a queue:
     // Delete all expired records since the last cron run.
     $expires = \Drupal::state()
