@@ -2,3 +2,7 @@ access hello:
   title: 'Ma permission hello'
   description: 'Description de ma permission pour le module hello.'
   restrict access: 'true'
+
+administer hello:
+  title: 'Admin hello'
+  description: 'Description de ma permission pour l Admin pour le module hello.'
