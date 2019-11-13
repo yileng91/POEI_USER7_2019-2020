@@ -39,7 +39,7 @@ class AdminForm extends ConfigFormBase {
         //ksm($purge_days_number);
 
         $form['purge_days_number'] = array(
-            '#title' => $this->t('Select purge stats user'),
+            '#title' => $this->t('How long to keep user activity statistics'),
             '#type' => 'select',
             '#description' => $this->t('Purge per day.'),
 
