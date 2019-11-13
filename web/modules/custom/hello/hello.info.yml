@@ -1,6 +1,8 @@
 name: Hello
 description: Hello, module for D8 Develop training.
 package: Trained People
+# core: 8.x
+configure: hello.admin_form
 type: module
 version: '8.0.0'
 core: '8.x'

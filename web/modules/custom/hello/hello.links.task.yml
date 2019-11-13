@@ -15,3 +15,9 @@ hello.page3:
   route_name: hello.page3
   base_route: entity.user.canonical
   weight: 3
+
+hello.form:
+  title: 'Formulaire'
+  route_name: hello.form
+  base_route: hello.page
+  weight: 4
