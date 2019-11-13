@@ -53,3 +53,7 @@ function hello_update_8100(){
     $schema = Database::getConnection()->schema();
     $schema->addField('hello_user_statistics', 'action', $field_spec);
 }
+
+function hello_uninstall(){
+    \Drupal::state()->delete('hello_form_submission_time');
+}
