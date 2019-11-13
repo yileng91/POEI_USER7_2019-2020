@@ -1,0 +1,16 @@
+{#
+/*
+
+paramaters :
+    _ user
+    _ count
+*/
+#}
+
+<div>
+    <span>
+        {% trans %}
+            The user {{ user.label }} with id : {{ user.id }} has connected {{ count }} time(s).
+        {% endtrans %}
+    </span>
+</div>

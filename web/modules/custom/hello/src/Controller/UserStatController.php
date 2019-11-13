@@ -34,10 +34,13 @@ class UserStatController extends ControllerBase
         // création d'un tableau de stats
         $stats = [];
         $date_formatter = \Drupal::service('date.formatter');
+        $nb = 0;
         foreach ($datas as $data) {
             $Action = $data->action == 1 ? $this->t('Login') : $this->t('Logout');
+            $nb += $data->action;
             /*$action = $data->action;
             if($action == '1'){
+                $nb ++;
                 $Action = $this->t('Login');
             }
             else{
@@ -47,13 +50,33 @@ class UserStatController extends ControllerBase
             $stats[] = [$Action,$time_log];
         }
 
+        $output = [
+                '#theme' => 'hello_user_connexion',
+                /*'#user' => $user->getDisplayName(),*/
+                '#user' => $user,
+
+                '#count' => $nb,
+            ];
         // affiche dans un tableau
-        return ['#type' => 'table',
-                /*'#header'=> ['Action', 'Time'],*/
+        /*return [
+                '#type' => 'table',
+                //'#header'=> ['Action', 'Time'],
                 '#header'=> [$this->t('Action'), $this->t('Time')],
                 '#rows' => $stats,
                 '#empty' => $this->t('Not Connections'),
                 '#cache' => ['max-age','0'],
+            ];*/
+
+        $connections = ['#type' => 'table',
+            //'#header'=> ['Action', 'Time'],
+            '#header'=> [$this->t('Action'), $this->t('Time')],
+            '#rows' => $stats,
+            '#empty' => $this->t('Not Connections'),
+            '#cache' => ['max-age','0'],
             ];
+        return [
+            $output,
+            $connections,
+        ];
     }
 }

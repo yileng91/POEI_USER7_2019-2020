@@ -138,3 +138,16 @@ function hello_user_delete(\Drupal\user\UserInterface $user) {
         ->execute();
 
 }
+
+function hello_theme($existing, $type, $theme, $path){
+    return [
+        'hello_user_connexion' => [
+            'template' => 'hello-user-connexion',
+            'variables' => [
+                'count' => NULL,
+                'user' => NULL,
+            ]
+        ]
+    ];
+
+}
