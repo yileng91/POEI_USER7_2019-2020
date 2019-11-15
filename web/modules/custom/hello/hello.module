@@ -1,0 +1,198 @@
+<?php
+
+/**
+ * Implements hook_help().
+ *
+ * @param $route_match
+ */
+function hello_help($route_name, \Drupal\Core\Routing\RouteMatchInterface $route_match) {
+    switch ($route_name) {
+
+        // Main module help for the block module.
+        case 'help.page.hello':
+            return '<p>' . t('Example module for Trained People') . '</p>';
+
+    }
+}
+
+/**
+ * Implements hook_cron().
+ *
+ */
+function hello_cron() {
+
+    \Drupal::messenger()->addMessage("hook hello cron");
+
+    $purge = \Drupal::config('hello.settings')->get('purge_days_number');
+    if($purge != '0'){
+        \Drupal::database()->delete('hello_user_statistics')
+            ->condition('time', REQUEST_TIME - $purge * (24 * 3600), '<')
+            ->execute();
+    }
+
+
+
+    /*// Short-running operation example, not using a queue:
+    // Delete all expired records since the last cron run.
+    $expires = \Drupal::state()
+        ->get('hello.last_check', 0);
+    \Drupal::database()
+        ->delete('hello_table')
+        ->condition('expires', $expires, '>=')
+        ->execute();
+    \Drupal::state()
+        ->set('hello.last_check', REQUEST_TIME);
+
+    // Long-running operation example, leveraging a queue:
+    // Queue news feeds for updates once their refresh interval has elapsed.
+    $queue = \Drupal::queue('aggregator_feeds');
+    $ids = \Drupal::entityManager()
+        ->getStorage('aggregator_feed')
+        ->getFeedIdsToRefresh();
+    foreach (Feed::loadMultiple($ids) as $feed) {
+        if ($queue
+            ->createItem($feed)) {
+
+            // Add timestamp to avoid queueing item more than once.
+            $feed
+                ->setQueuedTime(REQUEST_TIME);
+            $feed
+                ->save();
+        }
+    }
+    $ids = \Drupal::entityQuery('aggregator_feed')
+        ->condition('queued', REQUEST_TIME - 3600 * 6, '<')
+        ->execute();
+    if ($ids) {
+        $feeds = Feed::loadMultiple($ids);
+        foreach ($feeds as $feed) {
+            $feed
+                ->setQueuedTime(0);
+            $feed
+                ->save();
+        }
+    }*/
+}
+
+/**
+ * Implements hook_user_login().
+ *
+ * @param $account
+ */
+function hello_user_login(\Drupal\user\UserInterface $account) {
+    /*$config = \Drupal::config('system.date');
+
+    // If the user has a NULL time zone, notify them to set a time zone.
+    if (!$account
+            ->getTimezone() && $config
+            ->get('timezone.user.configurable') && $config
+            ->get('timezone.user.warn')) {
+        drupal_set_message(t('Configure your <a href=":user-edit">account time zone setting</a>.', array(
+            ':user-edit' => $account
+                ->url('edit-form', array(
+                    'query' => \Drupal::destination()
+                        ->getAsArray(),
+                    'fragment' => 'edit-timezone',
+                )),
+        )));
+    }*/
+
+    //ksm($account); // affiche l'Objet
+    \Drupal::messenger()->addMessage("Hello ".$account->getAccountName());
+    \Drupal::messenger()->addMessage(t('Welcome dear %name',
+        ['%name'=> $account->getAccountName()]));
+
+    /*$database = \Drupal::database();
+    $database->insert('hello_user_statistics')->fields([
+            'id' => $account->id(),
+            'time' => REQUEST_TIME,
+            'uuid' => $account->uuid(),
+            'action' => 1,
+        ])->execute();*/
+
+    \Drupal::database()->insert('hello_user_statistics')
+        ->fields([
+        'uid' => $account->id(),
+        'time' => REQUEST_TIME,
+        'action' => 1,
+    ])->execute();
+
+}
+
+function hello_user_logout(\Drupal\Core\Session\AccountProxyInterface $account) {
+
+    \Drupal::database()->insert('hello_user_statistics')
+        ->fields([
+            'uid' => $account->id(),
+            'time' => REQUEST_TIME,
+            'action' => 0,
+        ])->execute();
+
+}
+
+function hello_user_delete(\Drupal\user\UserInterface $user) {
+
+    // delete user entity
+    \Drupal::database()->delete('hello_user_statistics')
+        ->condition('uid', $user->id())
+        ->execute();
+
+}
+
+function hello_theme($existing, $type, $theme, $path){
+    return [
+        'hello_user_connexion' => [
+            'template' => 'hello-user-connexion',
+            'variables' => [
+                'count' => NULL,
+                'user' => NULL,
+            ]
+        ]
+    ];
+
+}
+
+function hello_form_user_admin_settings_alter(array &$form, \Drupal\Core\Form\FormStateInterface $form_state){
+
+    //ksm($form);
+
+    $roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple();
+    unset($roles['anonymous']);
+    //ksm($roles);
+    $options = [];
+    foreach ($roles as $role){
+        $options[$role->id()] = $role->label();
+    }
+
+    /*$toppings = array(
+        'webmaster' => t('Webmaster'),
+        'admin' => t('Administrator'),
+    );*/
+    $form['user'] = [
+        '#type' => 'details',
+        '#title' => t('Roles for which to collect activity statistics'),
+        '#open' => TRUE,
+        '#weight' => -1,
+    ];
+
+    $form['user']['user_stats'] = [
+        '#type' => 'checkboxes',
+        '#description' => t('Select the user role.'),
+        '#options' => $options,
+        '#default_value' => \Drupal::config('hello.settings')->get('user_stat_roles'),
+    ];
+
+    $form['#submit'][] = 'hello_user_admin_settings_form_submit';
+
+    //ksm($form);
+}
+/*
+ *  params :
+ *   - &$form : & permet de modifier le form
+ *   - $form_state
+ */
+function hello_user_admin_settings_form_submit(array &$form, \Drupal\Core\Form\FormStateInterface $form_state){
+    $options = $form_state->getValue('user_stats');
+
+    \Drupal::configFactory()->getEditable('hello.settings')->set('user_stat_roles', $options)->save();
+}

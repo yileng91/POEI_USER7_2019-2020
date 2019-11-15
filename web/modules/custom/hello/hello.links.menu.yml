@@ -1,0 +1,22 @@
+hello.page:
+  title: 'Hello!'
+  route_name: hello.page
+  description: 'Hello page'
+  menu_name: main
+
+hello.page2:
+  title: 'Hello 2'
+  route_name: hello.page2
+  description: 'Hello 2 page'
+
+hello.form:
+  title: 'Formulaire'
+  route_name: hello.form
+  description: 'Hello formulaire'
+
+hello.admin_form:
+  title: 'Hello Admin'
+  description: 'Hello module config page'
+  route_name: hello.admin_form
+  menu_name: admin
+  parent: system.admin_config

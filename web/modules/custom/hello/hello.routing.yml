@@ -1,0 +1,43 @@
+hello.page:
+  path: '/page-hello'
+  defaults:
+    _title: 'Titre hello'
+    _controller: '\Drupal\hello\Controller\HelloController::content'
+  requirements:
+    _access: 'TRUE'
+
+hello.page2:
+  path: '/hello/liste-noeuds/{nodetype}'
+  defaults:
+    _title: 'Titre hello 2'
+    _controller: '\Drupal\hello\Controller\Hello2Controller::content'
+    nodetype: ''
+  requirements:
+    _access: 'TRUE'
+
+hello.page3:
+  path: '/user/{user}/statistics'
+  defaults:
+    _title: 'Statistic User'
+    _controller: '\Drupal\hello\Controller\UserStatController::content'
+  requirements:
+    _access_hello: '48'
+    #_access: 'TRUE'
+
+hello.form:
+  path: '/hello-form'
+  defaults:
+    _title: 'Titre hello form'
+    _form: '\Drupal\hello\Form\HelloForm'
+  requirements:
+    _permission: 'access hello'
+    #_access: 'TRUE'
+
+hello.admin_form:
+  path: '/admin/config/hello'
+  defaults:
+    _title: 'User statistics'
+    _form: '\Drupal\hello\Form\AdminForm'
+  requirements:
+    _permission: 'administer hello'
+    #_access: 'TRUE'
