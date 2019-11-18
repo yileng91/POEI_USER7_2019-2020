@@ -1,0 +1,39 @@
+<?php
+use Drupal\Core\Database\Database;
+/*
+ * Installation d'une table
+ */
+function annonce_schema(){
+    $schema['annonce_user_views'] = [
+        'description' => 'Stores user connection statistics.',
+        'fields' => [
+            'id' => [
+                'description' => 'Primary Key: Unique history ID.',
+                'type' => 'serial',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+            ],
+            'time' => [
+                'description' => 'Timestamp.',
+                'type' => 'int',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+            ],
+            'uid' => [
+                'type' => 'int',
+                'description' => "Store user ID.",
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+            ],
+            'aid' => [
+                'type' => 'int',
+                'description' => "Store annonce ID.",
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+            ],
+        ],
+        'primary key' => ['id'],
+    ];
+
+    return $schema;
+}
