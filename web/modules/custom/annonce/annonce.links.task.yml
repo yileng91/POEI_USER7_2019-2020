@@ -1,0 +1,28 @@
+# Annonce routing definition
+annonce.settings_tab:
+  route_name: annonce.settings
+  title: 'Settings'
+  base_route: annonce.settings
+
+entity.annonce.canonical:
+  route_name: entity.annonce.canonical
+  base_route: entity.annonce.canonical
+  title: 'View'
+
+entity.annonce.edit_form:
+  route_name: entity.annonce.edit_form
+  base_route: entity.annonce.canonical
+  title: 'Edit'
+  # cache par utilisateur
+  class: '\Drupal\annonce\Plugin\Task\AnnonceCacheTask'
+
+entity.annonce.version_history:
+  route_name: entity.annonce.version_history
+  base_route: entity.annonce.canonical
+  title: 'Revisions'
+
+entity.annonce.delete_form:
+  route_name:  entity.annonce.delete_form
+  base_route:  entity.annonce.canonical
+  title: Delete
+  weight: 10
