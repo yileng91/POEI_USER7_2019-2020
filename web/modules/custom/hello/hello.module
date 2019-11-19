@@ -100,8 +100,8 @@ function hello_user_login(\Drupal\user\UserInterface $account) {
     $config_roles = \Drupal::config('hello.settings')->get('user_stat_roles');
     $user_roles = $account->getRoles();
 
-    ksm($user_roles);
-    ksm($config_roles);
+    //ksm($user_roles);
+    //ksm($config_roles);
     // compare les 2 tableaux et retourne ce qui est en commun
     $diff = array_intersect($user_roles, $config_roles);
 
@@ -121,8 +121,6 @@ function hello_user_login(\Drupal\user\UserInterface $account) {
 
     // track cet utilisateur
     if(count($diff) > 0) {
-        ksm($diff);
-        echo "login";
         \Drupal::database()->insert('hello_user_statistics')
             ->fields([
                 'uid' => $account->id(),

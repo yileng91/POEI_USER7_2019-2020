@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Contains annonce.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function annonce_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the annonce module.
+    case 'help.page.annonce':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('My Awesome Module') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/*
+function hook_views_data(){
+    $data['annonce_history'] = array();
+
+    $data['annonce_history']['table'] = array();
+
+    $data['annonce_history']['table']['group'] = t('Annonce history');
+
+    $data['annonce_history']['table']['provider'] = 'annonce_history';
+
+    $data['annonce_history']['table']['base'] = array(
+        // Identifier (primary) field in this table for Views.
+        'field' => 'uid',
+        // Label in the UI.
+        'title' => t('Annonce history'),
+        // Longer description in the UI. Required.
+        'help' => t('Store UID.'),
+        'weight' => -10,
+    );
+
+    return $data;
+
+}*/
