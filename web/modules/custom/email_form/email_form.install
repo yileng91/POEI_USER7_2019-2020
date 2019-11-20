@@ -1,0 +1,32 @@
+<?php
+use Drupal\Core\Database\Database;
+/*
+ * Installation d'une table
+ */
+function email_form_schema(){
+    $schema['email_form_node_subscriber'] = [
+        'description' => 'Stores emai subscriber.',
+        'fields' => [
+            'id' => [
+                'description' => 'Primary Key: Unique history ID.',
+                'type' => 'serial',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+            ],
+            'email' => [
+                'type' => 'varchar',
+                'description' => 'email of subscription',
+                'length' => 255
+            ],
+            'nid' => [
+                'type' => 'int',
+                'description' => "Store annonce ID.",
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+            ],
+        ],
+        'primary key' => ['id'],
+    ];
+
+    return $schema;
+}
