@@ -41,7 +41,15 @@ class EmailForm extends ReusableFormBase {
      * {@inheritdoc}
      */
     public function submitForm(array &$form, FormStateInterface $form_state) {
-        $mailManager = \Drupal::service('plugin.manager.mail');
-        $mailManager->mail('email_form', 'node_mail', 'vangneva.ku@gmail.com', 'en', [], NULL, TRUE);
+        /*$mailManager = \Drupal::service('plugin.manager.mail');
+        $mailManager->mail('email_form', 'node_mail', 'vangneva.ku@gmail.com', 'en', [], NULL, TRUE);*/
+
+        $node = \Drupal::service('current_route_match')->getParameter('node');
+        \Drupal::database()->insert('email_form_node_subscriber')->fields(
+            [
+                'nid' => $node->id(),
+                'email' => $form_state->getValue('email'),
+            ]
+        )->execute();
     }
 }

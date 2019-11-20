@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * déclare un hook mail
+ * @param $key
+ * @param $message
+ * @param $params
+ */
 function email_form_mail($key, &$message, $params) {
     switch ($key){
         case 'node_mail':
@@ -11,10 +16,22 @@ function email_form_mail($key, &$message, $params) {
     }
 }
 
+/**
+ * @param \Drupal\Core\Entity\EntityInterface $entity
+ */
 function email_form_node_update(\Drupal\Core\Entity\EntityInterface $entity){
 
+    $emails = \Drupal::database()->select('email_form_node_subscriber', 'efns')
+        ->fields('efns', ['email'])
+        ->condition('nid', $entity->id())
+        ->execute();
+
     $mailManager = \Drupal::service('plugin.manager.mail');
-    $mailManager->mail('email_form', 'node_mail', 'vangneva.ku@gmail.com', 'en', [], NULL, TRUE);
-    drupal_set_message('Envoi email OK');
+    foreach ($emails as $email){
+        //$email->email;
+        $mailManager->mail('email_form', 'node_mail', $email->email, 'en', [], NULL, TRUE);
+        drupal_set_message('Envoi email OK for '. $email->email);
+    }
+
 
 }
