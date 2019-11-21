@@ -206,13 +206,30 @@ function hello_form_user_admin_settings_alter(array &$form, \Drupal\Core\Form\Fo
 
     //ksm($form);
 }
-/*
- *  params :
- *   - &$form : & permet de modifier le form
- *   - $form_state
+
+
+/**
+ * @param array $form => permet de modifier le form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
  */
 function hello_user_admin_settings_form_submit(array &$form, \Drupal\Core\Form\FormStateInterface $form_state){
     $options = $form_state->getValue('user_stats');
 
     \Drupal::configFactory()->getEditable('hello.settings')->set('user_stat_roles', $options)->save();
+}
+
+/**
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
+ */
+function hello_form_alter(array &$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
+    // cas si on a pas le webprofiler
+    //ksm($form_id);
+    if($form_id == 'node_article_form') {
+        //ksm($form); // vérif le nom du champ
+
+        $form['revision_log']['#access'] = FALSE;   // supprime le formulaire revision_log
+    }
+
 }
