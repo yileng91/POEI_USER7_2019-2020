@@ -13,7 +13,8 @@ module:
   webprofiler: 0
 theme: {  }
 blacklist: {  }
-graylist: {  }
+graylist:
+  - 'webform.*'
 graylist_dependents: true
 graylist_skip_equal: true
 weight: 0
