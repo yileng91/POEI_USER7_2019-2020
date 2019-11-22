@@ -1,0 +1,10 @@
+uuid: 77081463-ba63-4fff-ab90-35a59320bdbd
+langcode: en
+status: true
+dependencies: {  }
+id: webmaster
+label: Webmaster
+weight: 3
+is_admin: null
+permissions:
+  - 'edit own annonce entities'
