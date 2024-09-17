@@ -1,0 +1,27 @@
+uuid: e90d3fa0-b7fa-4b20-9537-3bae9d4dc03d
+langcode: en
+status: true
+dependencies:
+  module:
+    - date_condition
+    - hello
+  theme:
+    - bartik
+id: hello
+theme: bartik
+region: sidebar_second
+weight: 0
+provider: null
+plugin: hello_block
+settings:
+  id: hello_block
+  label: Hello!
+  provider: hello
+  label_display: visible
+visibility:
+  date_condition:
+    id: date_condition
+    start_date: ''
+    end_date: ''
+    negate: null
+    context_mapping: {  }

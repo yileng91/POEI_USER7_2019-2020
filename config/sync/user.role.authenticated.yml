@@ -1,0 +1,24 @@
+uuid: 34272b44-1244-483f-9a66-b6eee609e3fb
+langcode: en
+status: true
+dependencies: {  }
+_core:
+  default_config_hash: btW6TFHajhy7Eo6YUvdFiPh4TcPggo8GBXYctjV6zag
+id: authenticated
+label: 'Authenticated user'
+weight: 1
+is_admin: false
+permissions:
+  - 'access comments'
+  - 'access content'
+  - 'access hello'
+  - 'access shortcuts'
+  - 'access site-wide contact form'
+  - 'add annonce entities'
+  - 'edit any annonce entities'
+  - 'edit own annonce entities'
+  - 'post comments'
+  - 'search content'
+  - 'skip comment approval'
+  - 'use text format basic_html'
+  - 'view all annonce revisions'

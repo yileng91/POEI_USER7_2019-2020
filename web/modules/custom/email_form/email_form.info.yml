@@ -1,0 +1,7 @@
+name: 'Email form'
+type: module
+description: 'Description.'
+core: 8.x
+package: 'Training'
+dependencies:
+  - reusable_forms:reusable_forms

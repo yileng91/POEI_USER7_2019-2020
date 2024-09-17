@@ -97,6 +97,15 @@ function hello_user_login(\Drupal\user\UserInterface $account) {
         )));
     }*/
 
+    $config_roles = \Drupal::config('hello.settings')->get('user_stat_roles');
+    $user_roles = $account->getRoles();
+
+    //ksm($user_roles);
+    //ksm($config_roles);
+    // compare les 2 tableaux et retourne ce qui est en commun
+    $diff = array_intersect($user_roles, $config_roles);
+
+    //print_r($diff);
     //ksm($account); // affiche l'Objet
     \Drupal::messenger()->addMessage("Hello ".$account->getAccountName());
     \Drupal::messenger()->addMessage(t('Welcome dear %name',
@@ -110,23 +119,34 @@ function hello_user_login(\Drupal\user\UserInterface $account) {
             'action' => 1,
         ])->execute();*/
 
-    \Drupal::database()->insert('hello_user_statistics')
-        ->fields([
-        'uid' => $account->id(),
-        'time' => REQUEST_TIME,
-        'action' => 1,
-    ])->execute();
+    // track cet utilisateur
+    if(count($diff) > 0) {
+        \Drupal::database()->insert('hello_user_statistics')
+            ->fields([
+                'uid' => $account->id(),
+                'time' => REQUEST_TIME,
+                'action' => 1,
+            ])->execute();
+    }
 
 }
 
 function hello_user_logout(\Drupal\Core\Session\AccountProxyInterface $account) {
 
-    \Drupal::database()->insert('hello_user_statistics')
-        ->fields([
-            'uid' => $account->id(),
-            'time' => REQUEST_TIME,
-            'action' => 0,
-        ])->execute();
+    $config_roles = \Drupal::config('hello.settings')->get('user_stat_roles');
+    $user_roles = $account->getRoles();
+
+    // compare les 2 tableaux et retourne ce qui est en commun
+    $diff = array_intersect($user_roles, $config_roles);
+    // track cet utilisateur
+    if(count($diff) > 0) {
+        \Drupal::database()->insert('hello_user_statistics')
+            ->fields([
+                'uid' => $account->id(),
+                'time' => REQUEST_TIME,
+                'action' => 0,
+            ])->execute();
+    }
 
 }
 
@@ -136,5 +156,80 @@ function hello_user_delete(\Drupal\user\UserInterface $user) {
     \Drupal::database()->delete('hello_user_statistics')
         ->condition('uid', $user->id())
         ->execute();
+
+}
+
+function hello_theme($existing, $type, $theme, $path){
+    return [
+        'hello_user_connexion' => [
+            'template' => 'hello-user-connexion',
+            'variables' => [
+                'count' => NULL,
+                'user' => NULL,
+            ]
+        ]
+    ];
+
+}
+
+function hello_form_user_admin_settings_alter(array &$form, \Drupal\Core\Form\FormStateInterface $form_state){
+
+    //ksm($form);
+
+    $roles = \Drupal::entityTypeManager()->getStorage('user_role')->loadMultiple();
+    unset($roles['anonymous']);
+    //ksm($roles);
+    $options = [];
+    foreach ($roles as $role){
+        $options[$role->id()] = $role->label();
+    }
+
+    /*$toppings = array(
+        'webmaster' => t('Webmaster'),
+        'admin' => t('Administrator'),
+    );*/
+    $form['user'] = [
+        '#type' => 'details',
+        '#title' => t('Roles for which to collect activity statistics'),
+        '#open' => TRUE,
+        '#weight' => -1,
+    ];
+
+    $form['user']['user_stats'] = [
+        '#type' => 'checkboxes',
+        '#description' => t('Select the user role.'),
+        '#options' => $options,
+        '#default_value' => \Drupal::config('hello.settings')->get('user_stat_roles'),
+    ];
+
+    $form['#submit'][] = 'hello_user_admin_settings_form_submit';
+
+    //ksm($form);
+}
+
+
+/**
+ * @param array $form => permet de modifier le form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ */
+function hello_user_admin_settings_form_submit(array &$form, \Drupal\Core\Form\FormStateInterface $form_state){
+    $options = $form_state->getValue('user_stats');
+
+    \Drupal::configFactory()->getEditable('hello.settings')->set('user_stat_roles', $options)->save();
+}
+
+/**
+ * @param $form
+ * @param \Drupal\Core\Form\FormStateInterface $form_state
+ * @param $form_id
+ */
+function hello_form_alter(array &$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
+    // cas si on a pas le webprofiler
+    //ksm($form_id);
+    if($form_id == 'node_article_form') {
+        //ksm($form); // vérif le nom du champ
+
+        $form['revision_log']['#access'] = FALSE;   // supprime le formulaire revision_log
+    }
 
 }

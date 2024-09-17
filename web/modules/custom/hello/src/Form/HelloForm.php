@@ -127,6 +127,11 @@ class HelloForm extends FormBase{
 
     public function submitForm(array &$form, FormStateInterface $form_state)
     {
+        // state API
+        \Drupal::state()->set('hello_form_submission_time', REQUEST_TIME);
+        //$val = \Drupal::state()->get('key');
+        //ksm($val);
+
         // TODO: Implement submitForm() method.
         $value1 = $form_state->getValue('first_value');
         $value2 = $form_state->getValue('second_value');
